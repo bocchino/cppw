@@ -73,11 +73,11 @@ function print_class_function_prototype() {
   print_indent_spacing(desired_indent_count + 2)
   printf name
   if (num_args == 0)
-    printf("(void)\n")
+    printf("(void)")
   else if (num_args == 1) {
     printf("(")
     print_function_arg(args[1])
-    print ")"
+    printf ")"
   }
   else {
     printf("(\n")
@@ -89,8 +89,11 @@ function print_class_function_prototype() {
       print ""
     }
     print_indent_spacing(desired_indent_count + 2)
-    print ")"
+    printf ")"
   }
+  if (const == 1)
+    printf " const"
+  print ""
   print_with_indent("{")
 }
 

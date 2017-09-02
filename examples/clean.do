@@ -6,4 +6,5 @@
 
 . ./defs.sh
 
-rm -f Example.hpp Example.cpp Value.cpp
+doall rm '*.o'
+rm_tmp

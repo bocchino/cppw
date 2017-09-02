@@ -6,4 +6,4 @@
 
 . ./defs.sh
 
-redo-ifchange Example.hpp Example.cpp Value.cpp
+redo-ifchange Example.o Value.o

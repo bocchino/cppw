@@ -1,10 +1,9 @@
 #!/bin/sh -e
 
 # ----------------------------------------------------------------------
-# default.hpp.do
+# default.o.do
 # ----------------------------------------------------------------------
 
 . ./defs.sh
 
-redo-ifchange Example.cppw
-awk -f ../scripts/cppw2hpp.awk Example.cppw
+default_o_do "$@"

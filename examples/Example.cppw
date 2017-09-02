@@ -1,8 +1,3 @@
-// ======================================================================
-// \name Example.hpp 
-// \author AUTO-GENERATED: DO NOT EDIT
-// \brief Example class interface
-// ====================================================================== 
 @CPPFILE "Example.cpp"
 @CPP
 @BEGIN
@@ -33,10 +28,10 @@ namespace Namespace {
   namespace {
 
     //! The identity function for Example.cpp
-    int identity(
-      int x //!< The int argument
+    Example::Value identity(
+      Example::Value v //!< The Value argument
     ) {
-      return x;
+      return v;
     }
 
   }
@@ -82,7 +77,7 @@ namespace Namespace {
           //! Set the int value
           @FUNCTION
             @NAME setIntvalue
-            @ARGUMENT int intvalue //!< The int value
+            @ARGUMENT int intValue //!< The int value
           @BEGIN
             this->intValue = intValue;
           @END
@@ -104,7 +99,7 @@ namespace Namespace {
       //! Get the value
       @FUNCTION
         @NAME getValue
-        @RETURN Value
+        @RETURN Example::Value
         @CONST
       @BEGIN
         return identity(this->value);
