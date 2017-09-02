@@ -16,6 +16,7 @@
 
 namespace Namespace {
 
+  //! A sample function
   @FUNCTION
     @NAME sampleFunction
     @RETURN int

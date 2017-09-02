@@ -9,6 +9,7 @@
 
 namespace Namespace {
 
+  //! A sample function
   int sampleFunction(void);
   
   class Example {
