@@ -59,17 +59,39 @@ function in_current_cppfile() {
   return current_cppfile == "" || current_cppfile == cppfile
 }
 
-# Print a class function prototype
-function print_class_function_prototype() {
-  print_with_indent("CLASS_FUNCTION_PROTOTYPE")
-  # TODO
-}
-
 # Print a function argument
 function print_function_arg(arg,  printed_arg) {
   printed_arg = arg
   sub(/ *\/\/.*$/, "", printed_arg)
   printf(printed_arg)
+}
+
+# Print a class function prototype
+function print_class_function_prototype() {
+  print_indent_spacing(desired_indent_count)
+  print return_type " " class " ::"
+  print_indent_spacing(desired_indent_count + 2)
+  printf name
+  if (num_args == 0)
+    printf("(void)\n")
+  else if (num_args == 1) {
+    printf("(")
+    print_function_arg(args[1])
+    print ")"
+  }
+  else {
+    printf("(\n")
+    for (i = 1; i <= num_args; ++i) {
+      print_indent_spacing(desired_indent_count + 6)
+      printf(args[i])
+      if (i < num_args)
+        printf(",")
+      print ""
+    }
+    print_indent_spacing(desired_indent_count + 2)
+    print ")"
+  }
+  print_with_indent("{")
 }
 
 # Print a non-class function prototype
@@ -144,7 +166,6 @@ $1 == "@BEGIN" && fn == 1 && in_current_cppfile() {
   else
     print_non_class_function_prototype()
 }
-
 
 $1 == "@BEGIN" {
   begin = 1
