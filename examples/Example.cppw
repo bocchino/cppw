@@ -1,0 +1,132 @@
+// ======================================================================
+// \name Example.hpp 
+// \author AUTO-GENERATED: DO NOT EDIT
+// \brief Example class interface
+// ====================================================================== 
+@CPPFILE "Example.cpp"
+@CPP
+@BEGIN
+
+#include "Example.hpp"
+@END
+@CPPFILE "Value.cpp"
+@CPP
+@BEGIN
+
+#include "Example.hpp"
+@END
+@CPPFILE "Example.cpp"
+
+@GUARD "Namespace_Example_HPP"
+
+namespace Namespace {
+
+  @FUNCTION
+    @NAME sampleFunction
+    @RETURN int
+  @BEGIN
+    return 0;
+  @END
+  @CPP
+  @BEGIN
+
+  namespace {
+
+    //! The identity function for Example.cpp
+    int identity(
+      int x //!< The int argument
+    ) {
+      return x;
+    }
+
+  }
+  @END
+@CPPFILE "Value.cpp"
+  @CPP
+  @BEGIN
+
+  namespace {
+
+    //! The identity function for Value.cpp
+    int identity(
+      int x //!< The int argument
+    ) {
+      return x;
+    }
+
+  }
+  @END
+  
+  class Example {
+
+      // ----------------------------------------------------------------------
+      // Types 
+      // ----------------------------------------------------------------------
+
+    public:
+
+      //! The type of a value
+      class Value {
+
+        public:
+
+          //! Get the int value
+          @FUNCTION
+            @NAME getIntValue
+            @RETURN int
+            @CONST
+          @BEGIN
+            return identity(this->intValue);
+          @END
+
+          //! Set the int value
+          @FUNCTION
+            @NAME setIntvalue
+            @ARGUMENT int intvalue //!< The int value
+          @BEGIN
+            this->intValue = intValue;
+          @END
+
+        private:
+
+          //! The int value
+          int intValue;
+
+      };
+
+@CPPFILE "Example.cpp"
+      // ----------------------------------------------------------------------
+      // Public member functions 
+      // ----------------------------------------------------------------------
+
+    public:
+
+      //! Get the value
+      @FUNCTION
+        @NAME getValue
+        @RETURN Value
+        @CONST
+      @BEGIN
+        return identity(this->value);
+      @END
+
+      //! Set the value
+      @FUNCTION
+        @NAME setValue
+        @ARGUMENT const Value& value
+      @BEGIN
+        this->value = value;
+      @END
+
+      // ----------------------------------------------------------------------
+      // Private member variables 
+      // ----------------------------------------------------------------------
+
+    private:
+
+      //! The value
+      Value value;
+
+  };
+
+}
