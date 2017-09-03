@@ -10,7 +10,7 @@ redo-ifchange Example.cppw
 
 Example_hpp_do() {
   echo '// ======================================================================
-// \\name Example.hpp 
+// \\name Example.hpp
 // \\author AUTO-GENERATED: DO NOT EDIT
 // \\brief Example class interface
 // ======================================================================'
@@ -19,7 +19,7 @@ Example_hpp_do() {
 
 Example_cpp_do() {
   echo '// ======================================================================
-// \\name Example.cpp 
+// \\name Example.cpp
 // \\author AUTO-GENERATED: DO NOT EDIT
 // \\brief Example class implementation
 // ======================================================================'
@@ -29,7 +29,7 @@ Example_cpp_do() {
 Value_cpp_do() {
   redo-ifchange Example.cppw
   echo '// ======================================================================
-// \\name Value.cpp 
+// \\name Value.cpp
 // \\author AUTO-GENERATED: DO NOT EDIT
 // \\brief Implementation file for Example::Value
 // ======================================================================'

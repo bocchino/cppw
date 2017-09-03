@@ -50,8 +50,13 @@ function print_content(line,  content) {
 # Print line at current indentation
 function print_with_indent(line,  indent_count) {
   indent_count = get_indent_count(line)
-  print_indent_spacing(indent_count)
-  print_content(line)
+  if (length(line) > 0) {
+    print_indent_spacing(indent_count)
+    print_content(line)
+  }
+  else {
+    print ""
+  }
 }
 
 # Are we in the current cpp file?
@@ -136,7 +141,7 @@ $1 == "@CPPFILE" {
   gsub(/"/, "", current_cppfile)
 }
 
-$1 == "@CPP" {
+$1 == "@CPP" || $1 == "@BOTH" {
   cpp = 1
 }
 
@@ -151,7 +156,7 @@ $1 == "@END" {
 }
 
 cpp == 1 && begin == 1 && in_current_cppfile() {
-  print
+  print_with_indent($0)
 }
 
 fn == 1 && begin == 1 && in_current_cppfile() {
