@@ -9,6 +9,10 @@
 
 namespace Namespace {
 
+  // ----------------------------------------------------------------------
+  // Public helper functions 
+  // ----------------------------------------------------------------------
+
   //! A sample function
   int sampleFunction(void);
   

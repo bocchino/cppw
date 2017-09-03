@@ -12,11 +12,12 @@ function set_indent_spacing() {
 }
 
 BEGIN {
-  TEXT = 0
-  CPPFILE = 1
-  CPP = 2
+  BOTH = 0
+  CPP = 1
+  CPPFILE = 2
   FUNCTION = 3
-  state = TEXT
+  HPP = 4
+  state = HPP
   begin = 0
 }
 
@@ -36,16 +37,22 @@ $1 == "@CPP" {
   state = CPP
 }
 
-$1 == "@BEGIN" {
-  begin = 1
+$1 == "@BOTH" {
+  state = BOTH
 }
 
 $1 == "@END" {
   begin = 0
 }
 
+state == BOTH && begin == 1 { print }
+
+$1 == "@BEGIN" {
+  begin = 1
+}
+
 begin == 0 && !($1 ~ /^@/) {
-  state = TEXT
+  state = HPP
 }
 
 $1 == "@FUNCTION" {
@@ -92,7 +99,7 @@ $1 == "@BEGIN" && state == FUNCTION {
   print ";"
 }
 
-state == TEXT { print }
+state == HPP { print }
 
 END {
   if (guard != "") {

@@ -8,9 +8,13 @@
 
 namespace Namespace {
 
+  // ---------------------------------------------------------------------- 
+  // Private helper functions
+  // ---------------------------------------------------------------------- 
+
   namespace {
 
-    //! The identity function for Value.cpp
+    //! The identity function
     int identity(
       int x //!< The int argument
     ) {

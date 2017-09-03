@@ -16,6 +16,10 @@
 
 namespace Namespace {
 
+  // ----------------------------------------------------------------------
+  // Public helper functions 
+  // ----------------------------------------------------------------------
+
   //! A sample function
   @FUNCTION
     @NAME sampleFunction
@@ -26,9 +30,13 @@ namespace Namespace {
   @CPP
   @BEGIN
 
+  // ---------------------------------------------------------------------- 
+  // Private helper functions
+  // ---------------------------------------------------------------------- 
+
   namespace {
 
-    //! The identity function for Example.cpp
+    //! The identity function
     Example::Value identity(
       Example::Value v //!< The Value argument
     ) {
@@ -41,9 +49,13 @@ namespace Namespace {
   @CPP
   @BEGIN
 
+  // ---------------------------------------------------------------------- 
+  // Private helper functions
+  // ---------------------------------------------------------------------- 
+
   namespace {
 
-    //! The identity function for Value.cpp
+    //! The identity function
     int identity(
       int x //!< The int argument
     ) {

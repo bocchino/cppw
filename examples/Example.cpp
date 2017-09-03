@@ -12,9 +12,13 @@ namespace Namespace {
     return 0;
   }
 
+  // ---------------------------------------------------------------------- 
+  // Private helper functions
+  // ---------------------------------------------------------------------- 
+
   namespace {
 
-    //! The identity function for Example.cpp
+    //! The identity function
     Example::Value identity(
       Example::Value v //!< The Value argument
     ) {
