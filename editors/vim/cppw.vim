@@ -14,6 +14,8 @@ else
   runtime! syntax/cpp.vim
 endif
 
+setl cindent
+
 " CPPW annotations
 syn match cppwSpecial "^ *@[A-Za-z0-9_]\+"
 
