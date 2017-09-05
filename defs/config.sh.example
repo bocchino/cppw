@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+# ----------------------------------------------------------------------
+# config.sh.example 
+# Copy this directory to config.sh and edit as necessary
+# ---------------------------------------------------------------------- 
+
+export INSTALL=install
+export BINDIR=$CPPW_ROOT/installdir/bin

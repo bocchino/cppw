@@ -5,5 +5,5 @@
 # ----------------------------------------------------------------------
 
 export DIR=`pwd`
-export CPPW=$DIR
-. $CPPW/defs-root.sh
+export CPPW_ROOT=$DIR
+. $CPPW_ROOT/defs-root.sh

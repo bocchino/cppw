@@ -21,14 +21,14 @@ then
 fi
 
 # Environment variables
-export CPPW=`canonicalize $CPPW`
-export SCRIPTS=$CPPW/scripts
+export CPPW_ROOT=`canonicalize $CPPW_ROOT`
+export SCRIPTS=$CPPW_ROOT/scripts
 
 # Standardize the sort orer across platforms
 export LC_ALL=C
 
 # Global configuration
-files=`ls $CPPW/defs/*.sh`
+files=`ls $CPPW_ROOT/defs/*.sh`
 for file in $files
 do
   . $file

@@ -6,6 +6,7 @@
 
 . ./defs.sh
 
+bin=$CPPW_ROOT/bin
 redo-ifchange Example.cppw
 
 Example_hpp_do() {
@@ -14,7 +15,7 @@ Example_hpp_do() {
 // \\author AUTO-GENERATED: DO NOT EDIT
 // \\brief Example class interface
 // ======================================================================'
-  awk -f ../scripts/cppw2hpp.awk Example.cppw
+  awk -f $bin/cppw2hpp.awk Example.cppw
 }
 
 Example_cpp_do() {
@@ -23,7 +24,7 @@ Example_cpp_do() {
 // \\author AUTO-GENERATED: DO NOT EDIT
 // \\brief Example class implementation
 // ======================================================================'
-  awk -f ../scripts/cppw2cpp.awk -v cppfile=Example.cpp Example.cppw
+  awk -f $bin/cppw2cpp.awk -v cppfile=Example.cpp Example.cppw
 }
 
 Value_cpp_do() {
@@ -33,7 +34,7 @@ Value_cpp_do() {
 // \\author AUTO-GENERATED: DO NOT EDIT
 // \\brief Implementation file for Example::Value
 // ======================================================================'
-  awk -f ../scripts/cppw2cpp.awk -v cppfile=Value.cpp Example.cppw
+  awk -f $bin/cppw2cpp.awk -v cppfile=Value.cpp Example.cppw
 }
 
 Example_hpp_do > Example.hpp
