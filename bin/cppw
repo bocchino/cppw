@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# ---------------------------------------------------------------------- 
+# cppw (C++ Writer): assist writing of cpp files
+# ---------------------------------------------------------------------- 
+# Copyright (C) 2017 Robert L. Bocchino Jr.
+# ---------------------------------------------------------------------- 
+
+hpp=0
+while :; do
+  case $1 in
+    -v|--version)
+      echo 'cppw version 1.0'
+      exit 0 ;;
+    -h|--hpp)
+      hpp=1 ;;
+    -f)
+      shift
+      cppfile=$1
+      if test -z "$cppfile"
+      then
+        echo 'cppw: option -f requires a file argument'
+        exit 1
+      fi ;;
+    --)
+      shift
+      break ;;
+    -?*)
+      echo 'usage: cppw -v' >&2
+      echo '       cppw -h [--] [input-files]' >&2
+      echo '       cppw [-f cpp-file] [--] [input-files]' >&2
+      exit 1 ;;
+    *)
+      break ;;
+  esac
+  shift
+done
+
+if test "$hpp" -eq 1 -a -n "$cppfile"
+then
+  echo 'cppw: options -h and -f are mutually exclusive'
+  exit 1
+fi
+
+for arg in "$@"; do
+  if test $arg != '-' && ! test -e $arg
+  then
+    echo 'cppw: file '$arg' does not exist' >&2
+    exit 1
+  fi
+done
+
+if test "$hpp" -eq 1
+then
+  cppw2hpp.awk "$@"
+elif test -n "$cppfile"
+then
+  cppw2cpp.awk -v cppfile=$cppfile "$@"
+else
+  cppw2cpp.awk "$@"
+fi

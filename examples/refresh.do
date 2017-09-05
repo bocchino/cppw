@@ -15,7 +15,7 @@ Example_hpp_do() {
 // \\author AUTO-GENERATED: DO NOT EDIT
 // \\brief Example class interface
 // ======================================================================'
-  awk -f $bin/cppw2hpp.awk Example.cppw
+  $bin/cppw -h Example.cppw
 }
 
 Example_cpp_do() {
@@ -24,7 +24,7 @@ Example_cpp_do() {
 // \\author AUTO-GENERATED: DO NOT EDIT
 // \\brief Example class implementation
 // ======================================================================'
-  awk -f $bin/cppw2cpp.awk -v cppfile=Example.cpp Example.cppw
+  $bin/cppw -f Example.cpp Example.cppw
 }
 
 Value_cpp_do() {
@@ -34,7 +34,7 @@ Value_cpp_do() {
 // \\author AUTO-GENERATED: DO NOT EDIT
 // \\brief Implementation file for Example::Value
 // ======================================================================'
-  awk -f $bin/cppw2cpp.awk -v cppfile=Value.cpp Example.cppw
+  $bin/cppw -f Value.cpp Example.cppw
 }
 
 Example_hpp_do > Example.hpp

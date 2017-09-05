@@ -8,4 +8,4 @@
 
 subdir_targets redo clean
 rm_tmp
-rm -rf .redo .do_built.dir
+rm -rf .redo .do_built.dir .do_built

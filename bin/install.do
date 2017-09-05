@@ -11,7 +11,7 @@ vars_require_set INSTALL BINDIR
 
 $INSTALL -d $BINDIR
 
-for file in cppw2hpp.awk cppw2cpp.awk
+for file in cppw2hpp.awk cppw2cpp.awk cppw
 do
   evald $INSTALL -m 0755 $file $BINDIR/$file
 done
