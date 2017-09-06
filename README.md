@@ -94,20 +94,20 @@ In the future, more meaningful tags may be added.
 To run cppw, use the command `cppw`.
 The following options are available when running this command:
 
-* `cppw` `-v`: Print the version number and exit, ignoring input.
+* `cppw -v`: Print the version number and exit, ignoring input.
 
-* `cppw` `-h` `[` `--` `]` `[` *files* ... `]`: Generate C++ code for inclusion
+* `cppw -h` [ `--` ] [ *files* ... ]: Generate C++ code for inclusion
 in an `.hpp` file
 
-* `cppw` `[` `--` `]` `[` *files* ... `]`: Generate C++ code for inclusion in
+* `cppw` [ `--` ] [ *files* ... ]: Generate C++ code for inclusion in
 a `.cpp` file, processing all tags.
 
-* `cppw` `-f` *cpp-file* `[` `--` `] [` *files* ... `]`:
+* `cppw -f` *cpp-file* [ `--` ] [ *files* ... ]:
 Generate C++ code for inclusion in a `.cpp` file, processing
 tags only in regions where the current C++ file, set with
 the tag `@CPPFILE`, is equal to *cpp-file*.
 
-The notation `[` *files* ... `]` means (1)
+The notation [ *files* ... ] means (1)
 process all input files, in order, if any appears; otherwise (2) 
 read from standard input.
 
