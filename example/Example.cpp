@@ -36,7 +36,8 @@ namespace Namespace {
   // ----------------------------------------------------------------------
 
   Example ::
-    Example(const Value& value)
+    Example(const Value& value) :
+      value(value)
   {
 
   }
@@ -44,6 +45,7 @@ namespace Namespace {
   Example ::
     ~Example(void)
   {
+
   }
 
   // ----------------------------------------------------------------------

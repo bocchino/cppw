@@ -142,6 +142,12 @@ function print_constructor_prototype() {
   sub(/^.*::/, "", name)
   printf name
   print_class_function_args()
+  if (num_initializers > 0)
+    print " :"
+  for (i = 1; i <= num_initializers; ++i) {
+    print_indent_spacing(desired_indent_count + 4)
+    printf initializers[i]
+  }
   print ""
   print_with_indent("{")
 }
@@ -294,6 +300,7 @@ $1 == "@FUNCTION" {
 $1 == "@CONSTRUCTOR" {
   constructor = 1
   num_args = 0
+  num_initializers = 0
 }
 
 $1 == "@DESTRUCTOR" {
@@ -309,6 +316,12 @@ $1 == "@ARGUMENT" {
   arg = $0
   sub(/^.*@ARGUMENT */, "", arg)
   args[++num_args] = arg
+}
+
+$1 == "@INITIALIZER" {
+  initializer = $0
+  sub(/^.*@INITIALIZER */, "", initializer)
+  initializers[++num_initializers] = initializer
 }
 
 $1 == "@STATIC" { static = 1 }
