@@ -71,12 +71,8 @@ function print_function_arg(arg,  printed_arg) {
   printf(printed_arg)
 }
 
-# Print a class function prototype
-function print_class_function_prototype() {
-  print_indent_spacing(desired_indent_count)
-  print return_type " " class " ::"
-  print_indent_spacing(desired_indent_count + 2)
-  printf name
+# Print class function arguments
+function print_class_function_args() {
   if (num_args == 0)
     printf("(void)")
   else if (num_args == 1) {
@@ -96,6 +92,15 @@ function print_class_function_prototype() {
     print_indent_spacing(desired_indent_count + 2)
     printf ")"
   }
+}
+
+# Print a class function prototype
+function print_class_function_prototype() {
+  print_indent_spacing(desired_indent_count)
+  print return_type " " class " ::"
+  print_indent_spacing(desired_indent_count + 2)
+  printf name
+  print_class_function_args()
   if (const == 1)
     printf " const"
   print ""
@@ -128,9 +133,37 @@ function print_non_class_function_prototype() {
   }
 }
 
+# Print a constructor prototype
+function print_constructor_prototype() {
+  print_indent_spacing(desired_indent_count)
+  print class " ::"
+  print_indent_spacing(desired_indent_count + 2)
+  name = class
+  sub(/^.*::/, "", name)
+  printf name
+  print_class_function_args()
+  print ""
+  print_with_indent("{")
+}
+
+# Print a destructor prototype
+function print_destructor_prototype() {
+  print_indent_spacing(desired_indent_count)
+  print class " ::"
+  print_indent_spacing(desired_indent_count + 2)
+  name = class
+  sub(/^.*::/, "", name)
+  printf "~" name
+  print_class_function_args()
+  print ""
+  print_with_indent("{")
+}
+
 BEGIN {
   cpp = 0
   fn = 0
+  constructor = 0
+  destructor = 0
   begin = 0
   desired_indent_count = 0
   indent_count_at_begin = 0
@@ -145,7 +178,15 @@ $1 == "@CPP" || $1 == "@BOTH" {
   cpp = 1
 }
 
-$1 == "@END" && fn == 1 && in_current_cppfile() {
+$1 == "@END" && fn == 1 && pure == 0 && in_current_cppfile() {
+  print_with_indent("}")
+}
+
+$1 == "@END" && constructor == 1 && in_current_cppfile() {
+  print_with_indent("}")
+}
+
+$1 == "@END" && destructor == 1 && in_current_cppfile() {
   print_with_indent("}")
 }
 
@@ -153,13 +194,23 @@ $1 == "@END" {
   begin = 0
   cpp = 0
   fn = 0
+  constructor = 0
+  destructor = 0
 }
 
 cpp == 1 && begin == 1 && in_current_cppfile() {
   print_with_indent($0)
 }
 
-fn == 1 && begin == 1 && in_current_cppfile() {
+fn == 1 && begin == 1 && pure == 0 && in_current_cppfile() {
+  print_with_indent($0)
+}
+
+constructor == 1 && begin == 1 && in_current_cppfile() {
+  print_with_indent($0)
+}
+
+destructor == 1 && begin == 1 && in_current_cppfile() {
   print_with_indent($0)
 }
 
@@ -167,12 +218,30 @@ $1 == "@BEGIN" {
   indent_count_at_begin = count_leading_spaces($0)
 }
 
-$1 == "@BEGIN" && fn == 1 && in_current_cppfile() {
+$1 == "@BEGIN" && fn == 1 && pure == 0 && in_current_cppfile() {
   print ""
   if (class != "")
     print_class_function_prototype()
   else
     print_non_class_function_prototype()
+}
+
+$1 == "@BEGIN" && constructor == 1 && in_current_cppfile() {
+  if (class == "") {
+    print "cppw2cpp.awk: constructor outside of class at line " NR > "/dev/stderr"
+    exit 1
+  }
+  print ""
+  print_constructor_prototype()
+}
+
+$1 == "@BEGIN" && destructor == 1 && in_current_cppfile() {
+  if (class == "") {
+    print "cppw2cpp.awk: destructor outside of class at line " NR > "/dev/stderr"
+    exit 1
+  }
+  print ""
+  print_destructor_prototype()
 }
 
 $1 == "@BEGIN" {
@@ -217,8 +286,19 @@ $1 == "@FUNCTION" {
   fn = 1
   static = 0
   const = 0
+  pure = 0
   num_args = 0
   return_type = "void"
+}
+
+$1 == "@CONSTRUCTOR" {
+  constructor = 1
+  num_args = 0
+}
+
+$1 == "@DESTRUCTOR" {
+  destructor = 1
+  num_args = 0
 }
 
 $1 == "@NAME" { name = $2 }
@@ -234,3 +314,5 @@ $1 == "@ARGUMENT" {
 $1 == "@STATIC" { static = 1 }
 
 $1 == "@CONST" { const = 1 }
+
+$1 == "@PURE" { pure = 1 }

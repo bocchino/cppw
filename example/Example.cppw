@@ -120,11 +120,13 @@ namespace Namespace {
         @ARGUMENT const Value& value //!< The value
         @INITIALIZER value(value)
       @BEGIN
+
       @END
 
       //! Destroy an Example object
       @DESTRUCTOR
       @BEGIN
+
       @END
       @BOTH
       @BEGIN
