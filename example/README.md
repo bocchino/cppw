@@ -34,22 +34,22 @@ By changing the C++ file to different values, you can
 use different parts of the same `.cppw` file to generate
 different `.cpp` files.
 In this case, the code generated from the tags in lines 2-6 
-are processed by `cpp -f Example.cpp` but not `cpp -f Value.cpp`.
+are processed when running `cpp -f Example.cpp` but when running `cpp -f Value.cpp`.
 These lines generate lines 6-7 of `Example.cpp`.
 The command that does it is in line 27 of `refresh.do`.
 
-**Line 2:** The tag `@CPP` says to use the following `BEGIN` block (see
+**Line 2:** The tag `@CPP` says to use the following `@BEGIN` block (see
 immediately below) to generate C++ code. 
 It is processed when generating a `.cpp` file if the C++ file matches (see above). 
 It is ignored when generating an `.hpp` file.
 
-**Lines 3-6:** An example of a `BEGIN` block.
+**Lines 3-6:** An example of a `@BEGIN` block.
 The block starts with the tag `@BEGIN` and ends with the tag `@END`.
-The lines between the tags are the **lines** of the `BEGIN` block.
+The lines between the tags are the **lines** of the `@BEGIN` block.
 When processing the tags, `cppw` copies these lines to its output,
 except for spacing:
 
-* A `BEGIN` block following a `@CPP` tag (as here) has **relative spacing**:
+* A `@BEGIN` block following a `@CPP` tag (as here) has **relative spacing**:
   each line of the begin block is assigned an **offset**, which
   is the number of spaces to the right of the `@BEGIN` tag that the first non-whitespace
   character appears (characters appearing to the left of the `@BEGIN` tag
@@ -59,10 +59,10 @@ except for spacing:
   context) plus the offset.
   In this case the current indent amount is zero and the offset is zero.
 
-* Other `BEGIN` blocks have **absolute spacing**. This means that each
+* Other `@BEGIN` blocks have **absolute spacing**. This means that each
   line of the block is copied to its output exactly, without altering
   the indent spacing.
-  Examples of `BEGIN` blocks with absolute spacing appear below.
+  Examples of `@BEGIN` blocks with absolute spacing appear below.
 
 Tabs count as two spaces for purposes of these rules. However, you should not
 ever use tabs when writing C++ code! Set your editor to replace tabs with
@@ -85,7 +85,7 @@ Ignored in generating `Example.cpp` and `Value.cpp`.
 Ignored in generating `Example.cpp` and `Value.cpp`.
 
 **Line 18:** The tag `@BOTH` says to place the lines of the following
-`BEGIN` block in the generated `.cpp` file with relative spacing
+`@BEGIN` block in the generated `.cpp` file with relative spacing
 (if the C++ file matches) and in the generated `.hpp` file with
 absolute spacing.
 
@@ -95,7 +95,7 @@ absolute spacing.
 **Lines 25-26:**: Generates lines 15-16 of `Example.hpp`.
 Ignored in generating `Example.cpp` and `Value.cpp`.
 
-**Line 27:** Illustrates a `FUNCTION` tag. This is a way to specify
+**Line 27:** Illustrates a `@FUNCTION` tag. This is a way to specify
 a C++ function prototype and body once, and use it to generate
 both the prototype for the `.hpp` file and the prototype plus body
 for the `.cpp` file.
@@ -106,5 +106,74 @@ A function specification consists of
 * Zero or more tags giving the arguments, return types, and
 qualifiers for the function (explained below).
 
-* An optional `@BEGIN` block giving the body of the function.
-If there is no body, then the function is pure virtual.
+* A `@BEGIN` block giving the body of the function.
+
+**Line 28:** The name of the function is `sampleFunction`.
+
+**Line 29:** The return type of the function is `int`.
+
+**Lines 30-32:** The body of the function.
+There are no arguments given, so the argument type is `void`.
+
+**Lines 33-50:** A chunk of code that goes into the current C++ file,
+which is `Example.cpp` (set in line 13).
+
+**Lines 51-69:** Code that goes into `Value.cpp`.
+
+**Lines 70-84:** Code that goes into `Example.hpp`.
+
+**Lines 85-91:** A class member function.
+Similar to the function definition starting at line 27, but it
+generates the appropriate `.hpp` and `.cpp` syntax for a member
+function.
+The `@CONST` tag in line 88 causes the function to be marked `const`.
+There are also tags `@STATIC`, `@VIRTUAL`, and `@PURE`,
+where `@PURE` means pure virtual.
+
+To keep the parsing simple, every function must have a `@BEGIN` block, 
+even if it is pure virtual.
+A pure virtual function should have an empty `@BEGIN` block (the
+actual contents of the block are ignored).
+
+**Lines 92-93:** Code that goes into `Example.hpp`.
+
+**Lines 94-99:** A class member function with an argument.
+There may be zero or more `@ARGUMENT` tags, each of which gives 
+an argument.
+Comments in the argument are reproduced in the `.hpp` file
+and omitted in the `.cpp` file.
+
+**Lines 100-106:** Code that goes into `Example.hpp`.
+
+**Lines 108-114:** Code that goes into `Example.hpp` and `Example.cpp`.
+
+**Lines 115-118:** Code that goes into `Example.hpp`.
+
+**Lines 119-124:** A constructor.
+The tag `@CONSTRUCTOR` introduces a constructor.
+There is no `@NAME` tag because the name of the constructor is implied
+by the enclosing class.
+The arguments are optional and work like function arguments.
+`@INITIALIZER` tags are optional; each one generates a constructor
+initializer.
+The constructor body goes in a `@BEGIN` block.
+
+**Lines 125-126:** Code that goes into `Example.hpp`.
+
+**Lines 127-132:** A destructor.
+The tag `@DESTRUCTOR` introduces a destructor.
+There is no `@NAME` tag because the name of the destructor is implied
+by the enclosing class.
+The constructor body goes in a `@BEGIN` block.
+
+**Lines 131-137:** Code that goes into `Example.hpp` and `Example.cpp`
+
+**Lines 138-141:** Code that goes into `Example.hpp`.
+
+**Lines 142-148:** Another class member function.
+
+**Lines 149-150:** Code that goes into `Example.hpp`.
+
+**Lines 151-156:** Another class member function.
+
+**Lines 157-169:** Code that goes into `Example.hpp`.
