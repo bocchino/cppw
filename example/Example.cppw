@@ -109,6 +109,27 @@ namespace Namespace {
       @BEGIN
 
       // ----------------------------------------------------------------------
+      // Construction and destruction 
+      // ----------------------------------------------------------------------
+      @END
+
+    public:
+
+      //! Construct an Example object
+      @CONSTRUCTOR
+        @ARGUMENT const Value& value //!< The value
+        @INITIALIZER value(value)
+      @BEGIN
+      @END
+
+      //! Destroy an Example object
+      @DESTRUCTOR
+      @BEGIN
+      @END
+      @BOTH
+      @BEGIN
+
+      // ----------------------------------------------------------------------
       // Public member functions
       // ----------------------------------------------------------------------
       @END

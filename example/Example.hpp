@@ -45,6 +45,20 @@ namespace Namespace {
       };
 
       // ----------------------------------------------------------------------
+      // Construction and destruction 
+      // ----------------------------------------------------------------------
+
+    public:
+
+      //! Construct an Example object
+      Example(
+          const Value& value //!< The value
+      );
+
+      //! Destroy an Example object
+      ~Example(void);
+
+      // ----------------------------------------------------------------------
       // Public member functions
       // ----------------------------------------------------------------------
 

@@ -31,17 +31,85 @@ function emit_function_prototype() {
   if (num_args > 0)
     printf("%s)", indent_spacing)
   if (const == 1)
-    printf(" const")
+    printf " const"
+  if (pure)
+    printf " = 0"
+
+}
+
+# Emit a constructor prototype
+function emit_constructor_prototype() {
+  if (class == "") {
+    print "cpp2hpp.awk: constructor outside of class at line " NR > "/dev/stderr"
+    exit 1
+  }
+  name = class
+  sub(/^.*::/, "", name)
+  printf(indent_spacing)
+  if (num_args == 0)
+    printf("%s(void)", name)
+  else
+    printf("%s(\n", name)
+  for (i = 1; i <= num_args; ++i) {
+    printf("%s    %s", indent_spacing, args[i])
+    if (i < num_args)
+      printf(",")
+    print ""
+  }
+  if (num_args > 0)
+    printf("%s)", indent_spacing)
+  print ";"
+}
+
+# Emit a destructor prototype
+function emit_destructor_prototype() {
+  if (class == "") {
+    print "cpp2hpp.awk: destructor outside of class at line " NR > "/dev/stderr"
+    exit 1
+  }
+  name = class
+  sub(/^.*::/, "", name)
+  printf(indent_spacing)
+  if (virtual)
+    printf "virtual "
+  printf("~%s(void);\n", name)
 }
 
 BEGIN {
   BOTH = 0
-  CPP = 1
-  CPPFILE = 2
-  FUNCTION = 3
-  HPP = 4
+  CONSTRUCTOR = 1
+  CPP = 2
+  CPPFILE = 3
+  DESTRUCTOR = 4
+  FUNCTION = 5
+  HPP = 6
   state = HPP
   begin = 0
+}
+
+$1 == "class" && begin == 0 {
+  if (class == "")
+    class = $2
+  else
+    class = class "::" $2
+}
+
+$1 ~ "}" && begin == 0 && class != "" {
+  if ($1 != "};") {
+    print "cppw2hpp: missing semicolon at end of class in line " NR > "/dev/stderr"
+    exit 1
+  }
+  if (class ~ /::/)
+    sub(/::[^:]*$/, "", class)
+  else
+    class = ""
+}
+
+$1 == "namespace" && begin == 0 {
+  if (class != "") {
+    print "cppw2hpp: namespace inside class at line " NR > "/dev/stderr"
+    exit 1
+  }
 }
 
 $1 == "@GUARD" {
@@ -80,9 +148,23 @@ $1 == "@FUNCTION" {
   state = FUNCTION
   static = 0
   const = 0
+  pure = 0
   virtual = 0
   num_args = 0
   return_type = "void"
+  set_indent_spacing()
+}
+
+$1 == "@CONSTRUCTOR" {
+  state = CONSTRUCTOR
+  num_args = 0
+  set_indent_spacing()
+}
+
+$1 == "@DESTRUCTOR" {
+  state = DESTRUCTOR
+  pure = 0
+  virtual = 0
   set_indent_spacing()
 }
 
@@ -100,6 +182,8 @@ $1 == "@STATIC" { static = 1 }
 
 $1 == "@CONST" { const = 1 }
 
+$1 == "@PURE" { pure = 1; virtual = 1 }
+
 $1 == "@VIRTUAL" { virtual = 1 }
 
 $1 == "@BEGIN" && state == FUNCTION {
@@ -107,13 +191,15 @@ $1 == "@BEGIN" && state == FUNCTION {
   print ";"
 }
 
+$1 == "@BEGIN" && state == CONSTRUCTOR {
+  emit_constructor_prototype()
+}
+
+$1 == "@BEGIN" && state == DESTRUCTOR {
+  emit_destructor_prototype()
+}
+
 begin == 0 && !($1 ~ /^@/) {
-  if (state == FUNCTION) {
-    print $0 > "/dev/stderr"
-    # Pure virtual function
-    emit_function_prototype()
-    print " = 0;"
-  }
   state = HPP
 }
 
