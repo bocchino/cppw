@@ -72,3 +72,44 @@ It's best to do this in the startup configuration file for your shell
 (e.g., `.bashrc`).
 
 5. Check that you have a good `cppw` installation: `which cppw`.
+
+## Using cppw
+
+### Tags
+
+A `.cppw` file consists of C++ code interspersed with **tags**. A cppw tag
+consists of the symbol `@` followed by an identifier, with no intervening
+space. Nothing but white space must occur before the tag on the same line as
+the tag.
+
+While sequence of characters meeting the definition above is a tag, only
+certain tags are **meaningful**, i.e., recognized by the tool.
+For more information on meaningful tags, and how to use `cppw` generally,
+see the `README` file in the `example` directory.
+
+In the future, more meaningful tags may be added.
+
+### Running cppw
+
+To run cppw, use the command `cppw`.
+The following options are available when running this command:
+
+* `cppw` `-v`: Print the version number and exit, ignoring input.
+
+* `cppw` `-h` `[` `--` `]` `[` *files* ... `]`: Generate C++ code for inclusion
+in an `.hpp` file
+
+* `cppw` `[` `--` `]` `[` *files* ... `]`: Generate C++ code for inclusion in
+a `.cpp` file, processing all tags.
+
+* `cppw` `-f` *cpp-file* `[` `--` `] [` *files* ... `]`:
+Generate C++ code for inclusion in a `.cpp` file, processing
+tags only in regions where the current C++ file, set with
+the tag `@CPPFILE`, is equal to *cpp-file*.
+
+The notation `[` *files* ... `]` means (1)
+process all input files, in order, if any appears; otherwise (2) 
+read from standard input.
+
+The option `--`, if present, marks the end of the options.
+The filename `-` indicates the standard input.
