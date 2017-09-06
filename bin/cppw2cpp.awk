@@ -84,7 +84,7 @@ function print_class_function_args() {
     printf("(\n")
     for (i = 1; i <= num_args; ++i) {
       print_indent_spacing(desired_indent_count + 6)
-      printf(args[i])
+      print_function_arg(args[i])
       if (i < num_args)
         printf(",")
       print ""
@@ -124,7 +124,7 @@ function print_non_class_function_prototype() {
     printf("(\n")
     for (i = 1; i <= num_args; ++i) {
       print_indent_spacing(desired_indent_count + 4)
-      printf(args[i])
+      print_function_arg(args[i])
       if (i < num_args)
         printf(",")
       print ""
@@ -142,13 +142,19 @@ function print_constructor_prototype() {
   sub(/^.*::/, "", name)
   printf name
   print_class_function_args()
-  if (num_initializers > 0)
+  if (num_initializers > 0) {
     print " :"
-  for (i = 1; i <= num_initializers; ++i) {
-    print_indent_spacing(desired_indent_count + 4)
-    printf initializers[i]
+    for (i = 1; i <= num_initializers; ++i) {
+      print_indent_spacing(desired_indent_count + 4)
+      printf initializers[i]
+      if (i < num_initializers)
+        printf ","
+      print ""
+    }
   }
-  print ""
+  else {
+    print ""
+  }
   print_with_indent("{")
 }
 

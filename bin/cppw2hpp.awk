@@ -11,6 +11,16 @@ function set_indent_spacing() {
   gsub(/\t/, "  ", indent_spacing)
 }
 
+# Add a comma to an argument
+function arg_with_comma(arg,  fields) {
+  split(arg, fields, /\/\//)
+  sub(/ *$/, "", fields[1])
+  if (fields[2] == "")
+    return fields[1] ","
+  else
+    return  fields[1] ", //" fields[2]
+}
+
 # Emit a function prototype
 function emit_function_prototype() {
   printf(indent_spacing)
@@ -23,9 +33,11 @@ function emit_function_prototype() {
   else
     printf("%s %s(\n", return_type, name)
   for (i = 1; i <= num_args; ++i) {
-    printf("%s    %s", indent_spacing, args[i])
     if (i < num_args)
-      printf(",")
+      arg = arg_with_comma(args[i])
+    else
+      arg = args[i]
+    printf("%s    %s", indent_spacing, arg)
     print ""
   }
   if (num_args > 0)
