@@ -10,8 +10,8 @@ cppw addresses this problem by letting you write your class as a single `.cppw`
 file, with no duplicate information.
 The `.cppw` file contains the minimum C++ code needed to generate the `.hpp`
 and `.cpp` files, plus a few simple annotations that tell the tool how you
-want those file laid out.
-Then you run the tool on the `.cppw` files to generate the `.hpp` and `.cpp`
+want those files laid out.
+You run the tool on the `.cppw` files to generate the `.hpp` and `.cpp`
 files.
 
 The tool is very flexible: from a single `.cppw` file you can generate the C++
