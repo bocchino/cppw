@@ -99,18 +99,18 @@ BEGIN {
   begin = 0
 }
 
-$1 == "class" && begin == 0 {
+($1 == "class" || $1 == "struct") && begin == 0 {
   if (class == "")
     class = $2
   else
     class = class "::" $2
 }
 
+/typedef/ && /{/ && class != "" {
+  class = class "::TYPE"
+}
+
 $1 ~ "}" && begin == 0 && class != "" {
-  if ($1 != "};") {
-    print "cppw2hpp: missing semicolon at end of class in line " NR > "/dev/stderr"
-    exit 1
-  }
   if (class ~ /::/)
     sub(/::[^:]*$/, "", class)
   else

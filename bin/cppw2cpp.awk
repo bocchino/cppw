@@ -47,11 +47,22 @@ function print_content(line,  content) {
   print content
 }
 
-# Print line at current indentation
-function print_with_indent(line,  indent_count) {
+# Print line at relative indentation
+function print_with_relative_indent(line,  indent_count) {
   indent_count = get_indent_count(line)
   if (length(line) > 0) {
     print_indent_spacing(indent_count)
+    print_content(line)
+  }
+  else {
+    print ""
+  }
+}
+
+# Print line with absolute indentation
+function print_with_absolute_indent(line) {
+  if (length(line) > 0) {
+    print_indent_spacing(desired_indent_count)
     print_content(line)
   }
   else {
@@ -104,7 +115,7 @@ function print_class_function_prototype() {
   if (const == 1)
     printf " const"
   print ""
-  print_with_indent("{")
+  print_with_relative_indent("{")
 }
 
 # Print a non-class function prototype
@@ -129,7 +140,7 @@ function print_non_class_function_prototype() {
         printf(",")
       print ""
     }
-    print_with_indent ") {"
+    print_with_relative_indent ") {"
   }
 }
 
@@ -155,7 +166,7 @@ function print_constructor_prototype() {
   else {
     print ""
   }
-  print_with_indent("{")
+  print_with_relative_indent("{")
 }
 
 # Print a destructor prototype
@@ -168,7 +179,7 @@ function print_destructor_prototype() {
   printf "~" name
   print_class_function_args()
   print ""
-  print_with_indent("{")
+  print_with_relative_indent("{")
 }
 
 BEGIN {
@@ -191,15 +202,15 @@ $1 == "@CPP" || $1 == "@BOTH" {
 }
 
 $1 == "@END" && fn == 1 && pure == 0 && in_current_cppfile() {
-  print_with_indent("}")
+  print_with_relative_indent("}")
 }
 
 $1 == "@END" && constructor == 1 && in_current_cppfile() {
-  print_with_indent("}")
+  print_with_relative_indent("}")
 }
 
 $1 == "@END" && destructor == 1 && in_current_cppfile() {
-  print_with_indent("}")
+  print_with_relative_indent("}")
 }
 
 $1 == "@END" {
@@ -211,19 +222,19 @@ $1 == "@END" {
 }
 
 cpp == 1 && begin == 1 && in_current_cppfile() {
-  print_with_indent($0)
+  print_with_relative_indent($0)
 }
 
 fn == 1 && begin == 1 && pure == 0 && in_current_cppfile() {
-  print_with_indent($0)
+  print_with_relative_indent($0)
 }
 
 constructor == 1 && begin == 1 && in_current_cppfile() {
-  print_with_indent($0)
+  print_with_relative_indent($0)
 }
 
 destructor == 1 && begin == 1 && in_current_cppfile() {
-  print_with_indent($0)
+  print_with_relative_indent($0)
 }
 
 $1 == "@BEGIN" {
@@ -266,22 +277,22 @@ $1 == "namespace" && begin == 0 {
     exit 1
   }
   print ""
-  print_with_indent($0)
+  print_with_absolute_indent($0)
   desired_indent_count += 2
 }
 
-$1 == "class" && begin == 0 {
+($1 == "class" || $1 == "struct") && begin == 0 {
   if (class == "")
     class = $2
   else
     class = class "::" $2
 }
 
+/typedef/ && /{/ && class != "" {
+  class = class "::TYPE"
+}
+
 $1 ~ "}" && begin == 0 && class != "" {
-  if ($1 != "};") {
-    print "cppw2cpp: missing semicolon at end of class in line " NR > "/dev/stderr"
-    exit 1
-  }
   if (class ~ /::/)
     sub(/::[^:]*$/, "", class)
   else
@@ -291,7 +302,7 @@ $1 ~ "}" && begin == 0 && class != "" {
 $1 == "}" && begin == 0 && class == "" {
   print ""
   desired_indent_count -= 2
-  print_with_indent($0)
+  print_with_absolute_indent($0)
 }
 
 $1 == "@FUNCTION" {
