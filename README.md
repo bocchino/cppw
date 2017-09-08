@@ -7,17 +7,16 @@ These files contain lots of duplicate information, which is a pain
 to construct and maintain by hand.
 
 cppw addresses this problem by letting you write your class as a single `.cppw` 
-file, with no duplicate information.
-The `.cppw` file contains the minimum C++ code needed to generate the `.hpp`
+file containing the minimum C++ code needed to generate the `.hpp`
 and `.cpp` files, plus a few simple annotations that tell the tool how you
 want those files laid out.
 You run the tool on the `.cppw` files to generate the `.hpp` and `.cpp`
 files.
 
 The tool is very flexible: from a single `.cppw` file you can generate the C++
-code for an `.hpp` file and one or more `.cpp` files. You can use standard
+code for one `.hpp` file and one or more `.cpp` files. You can use standard
 shell scripts to combine this generated code with other text (e.g.,
-auto-generated comment banners) into `.hpp` and `.cpp` files.
+auto-generated comment banners).
 
 ## Contents
 
@@ -49,18 +48,18 @@ To install the software, carry out the following steps:
 1. Clone this repository to your computer.
 
 2. Copy `defs/config.sh.example` to `defs/config.sh`.
-Edit the file so the following variables have the desired values:
+   Edit the file so the following variables have the desired values:
 
   * `INSTALL`: The command to use for installation.
 
   * `BINDIR`: The directory for installing the "binary files" for 
-running `cppw`.
+    running `cppw`.
 
-  If you don't change anything, the installation will go into subdirectories
-  of `$CPPW_ROOT/installdir`, where `CPPW_ROOT` is the top-level directory
-  of this repository.
-  To install `redo` globally, change `$REDO_ROOT/installdir` 
-  to something like `/usr`.
+   If you don't change anything, the installation will go into subdirectories
+   of `$CPPW_ROOT/installdir`, where `CPPW_ROOT` is the top-level directory
+   of this repository.
+   To install `redo` globally, change `$REDO_ROOT/installdir` 
+   to something like `/usr`.
 
 3. In the top-level directory of this repository, run `do install`.
 Note that if you opted for a global installation in step 2, you may
@@ -82,7 +81,7 @@ consists of the symbol `@` followed by an identifier, with no intervening
 space. Nothing but white space must occur before the tag on the same line as
 the tag.
 
-While sequence of characters meeting the definition above is a tag, only
+While any sequence of characters meeting the definition above is a tag, only
 certain tags are **meaningful**, i.e., recognized by the tool.
 For more information on meaningful tags, and how to use `cppw` generally,
 see the `README` file in the `example` directory.

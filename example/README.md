@@ -23,7 +23,7 @@ The following is a detailed explanation of the file `Example.cppw`.
 **Generating a `.hpp` file** means running `cppw -h`.
 **Generating a `.cpp` file** means running `cppw` or `cppw -f`.
 
-**Line 1:** The tag `@CPPFILE` sets the current C++ file.
+**Line 1:** The line `@CPPFILE` *file* sets the current C++ file to *file*.
 In this case, the C++ file is set to `Example.cpp`.
 The C++ file remains set to this value until it is set to `Value.cpp`
 in line 7.
@@ -47,22 +47,17 @@ It is ignored when generating an `.hpp` file.
 The block starts with the tag `@BEGIN` and ends with the tag `@END`.
 The lines between the tags are the **lines** of the `@BEGIN` block.
 When processing the tags, `cppw` copies these lines to its output,
-except for spacing:
+modifying the leading spaces as follows.
 
-* A `@BEGIN` block following a `@CPP` tag (as here) has **relative spacing**:
-  each line of the begin block is assigned an **offset**, which
-  is the number of spaces to the right of the `@BEGIN` tag that the first non-whitespace
-  character appears (characters appearing to the left of the `@BEGIN` tag
-  have a negative offset).
-  When `.cppw` constructs its output, the first character of each line appears
-  at the position given by the current indent amount (determined by the
-  context) plus the offset.
-  In this case the current indent amount is zero and the offset is zero.
-
-* Other `@BEGIN` blocks have **absolute spacing**. This means that each
-  line of the block is copied to its output exactly, without altering
-  the indent spacing.
-  Examples of `@BEGIN` blocks with absolute spacing appear below.
+The output of a `@BEGIN` block has **relative spacing**:
+each line of the begin block is assigned an **offset**, which
+is the number of spaces to the right of the `@BEGIN` tag that the first non-whitespace
+character appears (characters appearing to the left of the `@BEGIN` tag
+have a negative offset).
+When `.cppw` constructs its output, the first character of each line appears
+at the position given by the current indent amount (determined by the
+context) plus the offset.
+In this case the current indent amount is zero and the offset is zero.
 
 Tabs count as two spaces for purposes of these rules. However, you should not
 ever use tabs when writing C++ code! Set your editor to replace tabs with
