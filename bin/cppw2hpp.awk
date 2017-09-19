@@ -106,7 +106,7 @@ BEGIN {
     class = class "::" $2
 }
 
-/typedef/ && /{/ && class != "" {
+/typedef/ && /{/ && class != "" && begin == 0 {
   class = class "::TYPE"
 }
 
