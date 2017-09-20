@@ -79,6 +79,7 @@ function in_current_cppfile() {
 function print_function_arg(arg,  printed_arg) {
   printed_arg = arg
   sub(/ *\/\/.*$/, "", printed_arg)
+  sub(/ *=.*$/, "", printed_arg)
   printf(printed_arg)
 }
 

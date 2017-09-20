@@ -63,9 +63,11 @@ function emit_constructor_prototype() {
   else
     printf("%s(\n", name)
   for (i = 1; i <= num_args; ++i) {
-    printf("%s    %s", indent_spacing, args[i])
     if (i < num_args)
-      printf(",")
+      arg = arg_with_comma(args[i])
+    else
+      arg = args[i]
+    printf("%s    %s", indent_spacing, arg)
     print ""
   }
   if (num_args > 0)
