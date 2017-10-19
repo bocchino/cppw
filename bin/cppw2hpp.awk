@@ -24,6 +24,8 @@ function arg_with_comma(arg,  fields) {
 # Emit a function prototype
 function emit_function_prototype() {
   printf(indent_spacing)
+  if (friend)
+    printf("friend ")
   if (static)
     printf("static ")
   if (virtual)
@@ -162,6 +164,7 @@ $1 == "@FUNCTION" {
   state = FUNCTION
   static = 0
   const = 0
+  friend = 0
   pure = 0
   virtual = 0
   num_args = 0
@@ -184,7 +187,10 @@ $1 == "@DESTRUCTOR" {
 
 $1 == "@NAME" { name = $2 }
 
-$1 == "@RETURN" { return_type = $2  }
+$1 == "@RETURN" { 
+  return_type = $0
+  sub(/^.*@RETURN */, "", return_type)
+}
 
 $1 == "@ARGUMENT" {
   arg = $0
@@ -195,6 +201,8 @@ $1 == "@ARGUMENT" {
 $1 == "@STATIC" { static = 1 }
 
 $1 == "@CONST" { const = 1 }
+
+$1 == "@FRIEND" { friend = 1 }
 
 $1 == "@PURE" { pure = 1; virtual = 1 }
 

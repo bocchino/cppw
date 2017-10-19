@@ -27,8 +27,14 @@ function get_indent_count_offset(line,  indent_count_for_line, offset) {
 
 # Get the indent count for the current line
 function get_indent_count(line,  indent_count_offset, indent_count) {
-  indent_count_offset = get_indent_count_offset(line)
-  indent_count = desired_indent_count + indent_count_offset
+  if (line ~ /^[ \t]*#/) {
+    # Move all compiler directives to the left-hand margin
+    indent_count = 0
+  }
+  else {
+    indent_count_offset = get_indent_count_offset(line)
+    indent_count = desired_indent_count + indent_count_offset
+  }
   if (indent_count < 0)
     indent_count = 0
   return indent_count
@@ -141,7 +147,7 @@ function print_non_class_function_prototype() {
         printf(",")
       print ""
     }
-    print_with_relative_indent ") {"
+    print_with_relative_indent(") {")
   }
 }
 
@@ -244,7 +250,7 @@ $1 == "@BEGIN" {
 
 $1 == "@BEGIN" && fn == 1 && pure == 0 && in_current_cppfile() {
   print ""
-  if (class != "")
+  if (class != "" && friend == 0)
     print_class_function_prototype()
   else
     print_non_class_function_prototype()
@@ -308,10 +314,11 @@ $1 == "}" && begin == 0 && class == "" {
 
 $1 == "@FUNCTION" {
   fn = 1
-  static = 0
   const = 0
-  pure = 0
+  friend = 0
   num_args = 0
+  pure = 0
+  static = 0
   return_type = "void"
 }
 
@@ -328,7 +335,10 @@ $1 == "@DESTRUCTOR" {
 
 $1 == "@NAME" { name = $2 }
 
-$1 == "@RETURN" { return_type = $2  }
+$1 == "@RETURN" { 
+  return_type = $0
+  sub(/^.*@RETURN */, "", return_type)
+}
 
 $1 == "@ARGUMENT" {
   arg = $0
@@ -345,5 +355,7 @@ $1 == "@INITIALIZER" {
 $1 == "@STATIC" { static = 1 }
 
 $1 == "@CONST" { const = 1 }
+
+$1 == "@FRIEND" { friend = 1 }
 
 $1 == "@PURE" { pure = 1 }
